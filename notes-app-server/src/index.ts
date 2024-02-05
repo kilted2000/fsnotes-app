@@ -11,6 +11,11 @@ app.use(cors());
 app.get("/api/notes", async (req, res) => {
   res.json({ message: "success!" });
 });
+app.get("/notes", async (req, res) => {
+  const notes = await prisma.note.findMany();
+  res.json(notes);
+});
+
 app.post("/api/notes", async (req, res) => {
     const { title, content } = req.body;
   
@@ -27,6 +32,7 @@ app.post("/api/notes", async (req, res) => {
       res.status(500).send("Oops, something went wrong");
     }
   });
+
   app.put("/api/notes/:id", async (req, res) => {
     const { title, content } = req.body;
     const id = parseInt(req.params.id);
@@ -49,6 +55,7 @@ app.post("/api/notes", async (req, res) => {
       res.status(500).send("Oops, something went wrong");
     }
   });
+
   app.delete("/api/notes/:id", async (req, res) => {
     const id = parseInt(req.params.id);
   
@@ -66,10 +73,7 @@ app.post("/api/notes", async (req, res) => {
     }
   });
 
-app.get("/notes", async (req, res) => {
-    const notes = await prisma.note.findMany();
-    res.json(notes);
-  });
+
 
 app.listen(5000, () => {
   console.log("server running on localhost:5000");
